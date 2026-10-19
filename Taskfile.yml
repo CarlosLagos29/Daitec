@@ -1,0 +1,38 @@
+version: '3'
+
+output: prefixed
+
+tasks:
+  start:
+    desc: Levanta back y front en paralelo
+    deps: [back, front]
+
+  back:
+    desc: Levanta el backend (nodemon + ts-node)
+    dir: Back-DaiTec_dev
+    prefix: back
+    cmds:
+      - npm start
+
+  front:
+    desc: Levanta el frontend (Vite)
+    dir: FrontDaiTec_dev
+    prefix: front
+    cmds:
+      - npm run dev
+
+  install:
+    desc: Instala dependencias de ambos repos
+    deps: [install:back, install:front]
+
+  install:back:
+    dir: Back-DaiTec_dev
+    prefix: back
+    cmds:
+      - npm install
+
+  install:front:
+    dir: FrontDaiTec_dev
+    prefix: front
+    cmds:
+      - npm install

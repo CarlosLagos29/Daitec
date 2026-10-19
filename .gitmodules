@@ -1,0 +1,3 @@
+[submodule "FrontDaiTec_dev"]
+	path = FrontDaiTec_dev
+	url = git@github.com:CarlosLagos29/FrontDaiTec_dev.git
