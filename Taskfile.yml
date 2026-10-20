@@ -2,24 +2,30 @@ version: '3'
 
 output: prefixed
 
+vars:
+  # Carpeta del Node que pide el .nvmrc (via nvm). Se antepone al PATH en cada comando
+  # porque Task no deja pisar el PATH de la terminal desde `env`.
+  NODE_BIN:
+    sh: bash -c '. "${NVM_DIR:-$HOME/.nvm}/nvm.sh" && dirname "$(nvm which "$(cat .nvmrc)")"'
+
 tasks:
   start:
     desc: Levanta back y front en paralelo
-    deps: [back, front]
+    deps: [start:back, start:front]
 
-  back:
-    desc: Levanta el backend (nodemon + ts-node)
+  start:back:
+    desc: Levanta el backend (node --watch)
     dir: Back-DaiTec_dev
     prefix: back
     cmds:
-      - npm start
+      - PATH="{{.NODE_BIN}}:$PATH" npm start
 
-  front:
+  start:front:
     desc: Levanta el frontend (Vite)
     dir: FrontDaiTec_dev
     prefix: front
     cmds:
-      - npm run dev
+      - PATH="{{.NODE_BIN}}:$PATH" npm run dev
 
   install:
     desc: Instala dependencias de ambos repos
@@ -29,10 +35,15 @@ tasks:
     dir: Back-DaiTec_dev
     prefix: back
     cmds:
-      - npm install
+      - PATH="{{.NODE_BIN}}:$PATH" npm install
 
   install:front:
     dir: FrontDaiTec_dev
     prefix: front
     cmds:
-      - npm install
+      - PATH="{{.NODE_BIN}}:$PATH" npm install
+
+  node:
+    desc: Muestra la versión de Node que usan las tareas
+    cmds:
+      - PATH="{{.NODE_BIN}}:$PATH" node --version
