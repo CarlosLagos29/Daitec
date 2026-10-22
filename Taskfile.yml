@@ -43,6 +43,24 @@ tasks:
     cmds:
       - PATH="{{.NODE_BIN}}:$PATH" npm install
 
+  check:
+    desc: Typecheck + lint (incluye formato) de ambos repos
+    deps: [check:back, check:front]
+
+  check:back:
+    dir: Back-DaiTec_dev
+    prefix: back
+    cmds:
+      - PATH="{{.NODE_BIN}}:$PATH" npm run typecheck
+      - PATH="{{.NODE_BIN}}:$PATH" npm run lint
+
+  check:front:
+    dir: FrontDaiTec_dev
+    prefix: front
+    cmds:
+      - PATH="{{.NODE_BIN}}:$PATH" npm run typecheck
+      - PATH="{{.NODE_BIN}}:$PATH" npm run lint
+
   node:
     desc: Muestra la versión de Node que usan las tareas
     cmds:
